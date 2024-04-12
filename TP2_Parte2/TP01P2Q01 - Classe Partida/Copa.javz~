@@ -1,0 +1,230 @@
+import java.io.*;
+import java.nio.charset.*;
+public class Copa {
+	public static void main (String[] args) {
+		String file = "/tmp/copa/";
+		file += "1930.html";
+		Partida partida = new Partida();
+		partida.leitura(file);
+	
+	}
+}
+
+class Partida {
+	private int copa;
+	private int placar1;
+	private int placar2;
+	private int dia;
+	private int mes;
+	private String etapa;
+	private String time1;
+	private String time2;
+	private String local;
+
+	public void setCopa (int copa) {
+		this.copa = copa;
+	}
+	public void setPlacar1 (int placar1) {
+		this.placar1 = placar1;
+	}
+	public void setPlacar2 (int placar2) {
+		this.placar2 = placar2;
+	}
+	public void setDia (int dia) {
+		this.dia = dia;
+	}
+	public void setMes (int mes) {
+		this.mes = mes;
+	}
+	public void setEtapa (String etapa) {
+		this.etapa = etapa;
+	}
+	public void setTime1 (String time1) {
+		this.time1 = time1;
+	}
+	public void setTime2 (String time2) {
+		this.time2 = time2;
+	}
+	public void setLocal  (String local) {
+		this.local = local;
+	}
+	public int getCopa () {
+		return this.copa;
+	}
+	public int getPlacar1 () {
+		return this.placar1;
+	}
+	public int getPlacar2 () {
+		return this.placar2;
+	}
+	public int getDia () {
+		return this.dia;
+	}
+	public int getMes () {
+		return this.mes;
+	}
+	public String getEtapa () {
+		return this.etapa;
+	}
+	public String getTime1 () {
+		return this.time1;
+	}
+	public String getTime2 () {
+		return this.time2;
+	}
+	public String getLocal () {
+		return this.local;
+	}
+	
+	//public void clone() {
+	//}
+
+	public void leitura (String arq) {
+		String aux = "";//auxiliar para a leitura do BufferReader	
+		String html = "";//String para a atribuicao final da String lida
+		boolean leituraValida = false;
+		StringBuffer sb = new StringBuffer();//StringBuffer gera uma String que podera ser modificada		
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arq),"ISO-8859-1"));
+			aux = br.readLine();
+			while(!(aux.contains("<tr bgcolor=\"#000000"))) {//apos essa tag nao eh necessario mais a leitura pois todos os dados
+								        //relevantes foram lidos
+	      
+				if(aux.contains("<table")) leituraValida = true;//boolean mudara para true para a leitura      
+				                                                                         
+				if(leituraValida)sb.append(aux + "\n");//caso a leitura tenho chegado na tag table sera lido ate o fechamento
+
+				aux = br.readLine();
+			}//fim while
+			br.close();
+		}//fim try
+		catch(IOException ioException) {
+			ioException.printStackTrace();
+		}//fim catch
+		html = sb.toString();//retorna os dados da sequencia para a variavel html
+		//System.out.println(html);
+		String removidas = removeTags(html);
+		//System.out.println(removidas);
+		//imprime(removidas);
+		setGeral(removidas);
+	}//fim leitura
+
+	public String removeTags(String html) {
+		StringBuffer sb = new StringBuffer();//StringBuffer para gerar uma String que podera ser modificada
+		boolean chegouNaTag = false;		
+		for(int i = 0;i < html.length();i++) {
+			if(html.charAt(i) == '>' && ((html.charAt(i+1)>='A'&&html.charAt(i+1)<='Z')||(html.charAt(i+1)>='0'&&
+				html.charAt(i+1)<='9'))) chegouNaTag = true;//caso na posicao haja '>' e a proxima posicao for um numero
+								           //ou uma letra,o boolean tornara true para a concatenacao
+			
+			if(html.charAt(i) == '<')chegouNaTag = false;//caso na posicao haja '<' outra tag inicia,entao nao ha leitura
+
+			if(chegouNaTag)sb.append(html.charAt(i+1));//concatenacao de posicoes validas
+		}//fim for(i) 
+		for(int j=0;j<sb.length();j++) {//laco for para substituir as ocorrencias de '<' que sobraram por '\n'
+			if(sb.charAt(j) == '<')sb.setCharAt(j,' ');
+		}//fim for(j)
+		return sb.toString();
+	}//fim removeTags
+
+	public void setGeral(String html) {
+		String etapa = "";
+		String dia = "";
+		String mes = "";
+		boolean leituraValida = false;
+		boolean leituraValida2 = false;
+		boolean leituraValida3 = false;
+		for(int i = 0;i < html.length();i++) {
+		   if(html.charAt(i)=='G')leituraValida = true;     
+                   if(html.charAt(i) >= '1'&& html.charAt(i) <= '9')leituraValida = false;
+	           if(leituraValida)etapa +=html.charAt(i);
+
+		   if((html.charAt(i)>='0' && html.charAt(i) <='9')&&html.charAt(i+2)=='/')leituraValida2 = true;
+		   if(html.charAt(i) == '/')leituraValida2 = false;
+		   if(leituraValida2) dia += html.charAt(i);
+
+		   if(html.charAt(i) == '/')leituraValida3 = true;
+		   if(html.charAt(i) >= 'A' && html.charAt(i) <= 'Z')leituraValida3 = false;
+                   if(leituraValida3)mes += html.charAt(i);
+                }
+		//System.out.print(etapa);
+		setEtapa(etapa);
+		//int day = Integer.valueOf(dia);
+                //int month = Integer.valueOf(mes);
+		//setDia(day);
+		//setMes(month);
+		System.out.println(etapa+" "+dia+"/"+mes+"\n");
+		//imprime();
+	}
+	
+	public void imprime(){//String html){
+		/*
+		System.out.println("[COPA "+getCopa()+"] - "+getEtapa()+" - "+getDia()+"/"+getMes()+" - "+getTime1()+" ("+getPlacar1()+") x "+
+				   "("+getPlacar2()+") "+getTime2()+"  - "+getLocal());
+		*/
+		//System.out.print(getEtapa()+" - "+getPlacar1());
+	}
+}//fim class Partida
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
