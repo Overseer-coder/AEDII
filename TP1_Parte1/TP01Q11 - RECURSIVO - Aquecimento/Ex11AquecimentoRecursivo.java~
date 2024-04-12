@@ -1,0 +1,33 @@
+public class Ex11AquecimentoRecursivo {
+	public static int ehMaiusculo(String s) {
+		return ehMaiusculo(s,0);
+	}
+
+	public static int ehMaiusculo(String s,int i) {
+		int contador=0;
+		if(i < s.length()) {
+			if(s.charAt(i) >= 'A' || s.charAt(i) <= 'Z') {
+				ehMaiusculo(s,i+1);
+				contador++;
+			}else {
+				ehMaiusculo(s,i+1);
+			}
+		}
+		return contador;
+	}
+
+	public static void main (String[] args) {
+		String[] entrada = new String[1000];
+		int nEntrada = 0;
+
+		do {
+			entrada[nEntrada] = MyIO.readLine();
+		}while(entrada[nEntrada++].equals("FIM") == false);
+		nEntrada--;
+
+		for(int i = 0;i < nEntrada;i++) {
+			MyIO.println(ehMaiusculo(entrada[i]));
+		}
+	}
+}		
+

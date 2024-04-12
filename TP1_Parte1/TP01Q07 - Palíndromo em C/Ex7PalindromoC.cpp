@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <string.h>
+#define cSize 1000
+bool ehPalindromo(char c[]) {
+	bool ehPalindromo = true;
+	int i = 0;	
+	int j = strlen(c)-2;//-2 para pegar a ultima letra,-1 sera o \n
+	while(i < j && ehPalindromo) {//caso um contador passe o outro significa que a palavra eh um palindromo
+		//printf("%c %c\n",c[i],c[j]);
+		if(c[i] != c[j]) {
+			ehPalindromo = false;
+		}//fim if
+		i++;
+		j--;
+	}//fim while	
+	return ehPalindromo;
+}//fim ehPalindromo
+
+int main(void) {
+	char entrada[cSize];
+	int nEntrada = 0;
+
+	fgets(entrada,cSize,stdin);//leitura padrao antes de entrar na repeticao para nao ser contada a ultima linha FIM
+	while(strcmp(entrada,"FIM\n") != 0) {//para cada repeticao o metodo eh chamado
+		if(ehPalindromo(entrada)) {
+			printf("SIM\n");
+		}else {
+			printf("NAO\n");
+		}//fim else
+		fgets(entrada,cSize,stdin);//leitura ao final para sua saida antes de entrar no metodo e nao ser considerada a ultima linha
+	}//fim while
+	return 0;
+}//fim main

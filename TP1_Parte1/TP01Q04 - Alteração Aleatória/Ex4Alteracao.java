@@ -1,0 +1,34 @@
+import java.util.Random;
+public class Ex4Alteracao {
+	static Random generate = new Random();//objeto criado na class principal para ser usado em outros metodos
+	public static String alteraString(String s) {
+		String aux = "";//auxilar para a concatenacao da string
+		char c1 = (char)('a' + (Math.abs(generate.nextInt())%26));
+		char c2 = (char)('a' + (Math.abs(generate.nextInt())%26));		
+				
+		for(int i = 0;i < s.length();i++) {
+			if(s.charAt(i) == c1) {
+				//s.charAt(i) = c2; Tentativa falha
+				aux+=c2;//auxilar ganha um novo char quando ha a ocorrencia do primeiro			
+			}else {
+				aux+=s.charAt(i);//palavra sendo "montada"
+			}//fim else
+		}//fim for
+		return aux;
+	}//fim alteraString
+
+	public static void main(String[] args) {
+		String[] entrada = new String[1000];
+		int nEntrada = 0;
+		generate.setSeed(4);
+
+		do {//leitura da entrada padrao
+			entrada[nEntrada] = MyIO.readLine();
+		}while(entrada[nEntrada++].equals("FIM") == false);
+		nEntrada--;//desconsiderar ultima linha("FIM")
+
+		for(int i = 0;i < nEntrada;i++) {//para cada string poe-se em pratica o metodo para a troca de characteres
+			MyIO.println(alteraString(entrada[i]));
+		}//fim for
+	}//fim main
+}//fim class

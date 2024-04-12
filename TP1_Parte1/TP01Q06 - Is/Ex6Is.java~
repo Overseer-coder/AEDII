@@ -1,0 +1,110 @@
+public class Ex6Is {
+	public static String onlyVogais(String s) {
+		boolean ehVogal = true;
+		int i = 0;
+		String resp = "";
+		while(ehVogal && i < s.length()) {
+			if(s.charAt(i)!='a'||s.charAt(i)!='e'||s.charAt(i)!='i'||s.charAt(i)!='o'||s.charAt(i)!='u') {		
+				ehVogal = false;
+			}//fim if
+		}//fim while
+
+		if(ehVogal) {
+			resp = "SIM";
+		}else {
+			resp = "NAO";
+		}//fim else
+		return resp;
+	}//fim onlyVogais
+
+	public static String onlyConsoantes(String s) {
+		boolean ehConsoante = true;
+		int i = 0;
+		String resp = "";
+		while(ehConsoante && i < s.length()) {
+			if(s.charAt(i)=='a'||s.charAt(i)=='e'||s.charAt(i)=='i'||s.charAt(i)=='o'||s.charAt(i)=='u') {
+				ehConsoante = false;//caso a letra seja igual a uma vogal ela nao sera uma palavra apenas de consoantes
+			}//fim if
+			if(s.charAt(i)=='A'||s.charAt(i)=='E'||s.charAt(i)=='I'||s.charAt(i)=='O'||s.charAt(i)=='U') {
+				ehConsoante = false;//mesmo caso de cima,porem,para vogais maiusculas
+			}//fim if
+			if(s.charAt(i)>=0||s.charAt(i)<=9) {
+				ehConsoante = false;//caso a palavra possua numeros,ela nao sera uma palavras apenas de consoantes
+			}//fim if
+			i++;
+		}//fim while
+
+		if(ehConsoante) {
+			resp = "SIM";
+		}else {
+			resp = "NAO";
+		}//fim else
+		return resp;
+	}//fim onlyConsoantes
+
+	public static String sohInt(String s) {
+		boolean sohInt = true;
+		int i = 0;
+		String resp = "";
+
+		while(sohInt && i < s.length()) {
+			if((s.charAt(i) >= 'a'&&s.charAt(i) <= 'z')||(s.charAt(i)>='A'&&s.charAt(i)<='Z')) {
+				sohInt = false;//caso a posicao seja um letra ela nao sera apenas um inteiro
+			}//fim if
+			if(s.charAt(i) == '.'||s.charAt(i) == ',') {
+				sohInt = false;//restricao do '.' e da ',' pois numeros inteiros nao as possuem
+			}//fim if
+			i++;
+		}//fim while
+		if(sohInt) {
+			resp = "SIM";
+		}else {
+			resp = "NAO";
+		}//fim else
+		return resp;
+	}//fim sohInt
+
+	public static String sohDouble(String s) {
+		boolean sohDouble = true;
+		int i = 0;
+		int contaVirgulaPonto = 0;
+		String resp = "";
+
+		while(sohDouble && i < s.length()) {
+	 		if((s.charAt(i) >= 'a'&&s.charAt(i) <= 'z')||(s.charAt(i)>='A'&&s.charAt(i)<='Z')) {
+				sohDouble = false;//caso a posicao seja uma palavra ela nao sera apenas um real
+			}//fim if
+			if(s.charAt(i) == '.' || s.charAt(i) == ',') {
+				contaVirgulaPonto++;/*quando houver '.' ou ',' adicionara um ao contador,pois um double nao possui mais de
+						      1 ponto ou 1 virgula
+						    ***********************************************************************************/				}//fim if
+			i++;
+		}//fim while
+		if(contaVirgulaPonto > 1)sohDouble = false;//se houver mais de um '.' ou ',' nao eh um real
+
+		if(sohDouble) {
+			resp = "SIM";
+		}else {
+			resp = "NAO";
+		}//fim else
+		return resp;
+	}//fim sohDouble
+
+	public static void main (String[] args) {
+		String[] entrada = new String[1000];
+		int nEntrada = 0;
+
+		do {//leitura da entrada padrao
+			entrada[nEntrada] = MyIO.readLine();
+		}while(entrada[nEntrada++].equals("FIM") == false);
+		nEntrada--;//desconsiderar a ultima linha(FIM)
+
+		for(int i = 0;i < nEntrada;i++) {//cada palavra eh submetida a todos os 4 metodos propostos
+			MyIO.print(onlyVogais(entrada[i])+" ");
+			MyIO.print(onlyConsoantes(entrada[i])+" ");
+			MyIO.print(sohInt(entrada[i])+" ");
+			MyIO.print(sohDouble(entrada[i])+" ");
+			MyIO.println(" ");
+		}//fim for
+	}//fim main
+}//fim class

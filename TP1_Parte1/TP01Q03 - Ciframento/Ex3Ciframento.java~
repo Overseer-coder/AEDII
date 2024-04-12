@@ -1,0 +1,32 @@
+public class Ex3Ciframento {
+	public static char fazCifra(char c) {
+		char aux = ' ';
+		int i = 0;
+		if(c >= 'A' && c <= 'Z'){ 
+			aux = (char)c.charAt(i)+3;
+		}
+		return c;
+	}
+
+	public static void escreveCifra(String s) {
+		String aux = " ";
+		for(int i = 0;i < s.length()-1;i++) {
+			s.charAt(i) = fazCifra(s.charAt(i));
+			
+		}	
+		MyIO.println(s);
+	}
+
+	public static void main (String[] args) {
+		String[] entrada = new String[1000];
+		int nEntrada = 0;
+		do {
+			entrada[nEntrada] = MyIO.readLine();
+		}while(entrada[nEntrada++].equals("FIM") == false);
+
+		for(int i = 0;i < nEntrada;i++) {
+			escreveCifra(entrada[i]);
+		}
+	}
+}	
+		
